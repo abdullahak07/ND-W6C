@@ -43,21 +43,19 @@ export default defineConfig({
       transformIndexHtml(source) {
         let html = source;
 
-        // Tutorial belongs after the glossary (immediately before </main>), not before the final boss.
         html = html.replace(
           "html=html.replace('<section class=\"section\" id=\"boss\">',tutorialHTML+'<section class=\"section\" id=\"boss\">');",
           "html=html.replace('</main>',tutorialHTML+'</main>');"
         );
 
-        // Keep the Tutorial link last in the navigation to match its position after the glossary.
         html = html.replace(
           "'<a href=\"#forward\">Forwarding</a><a href=\"#tutorial\">Tutorial</a><a href=\"#boss\">Boss</a>'",
           "'<a href=\"#forward\">Forwarding</a><a href=\"#boss\">Boss</a><a href=\"#tutorial\">Tutorial</a>'"
         );
 
-        // Inject the louder WebAudio patch into the reconstructed student page itself.
         const marker = 'document.open();document.write(html);document.close();';
-        const replacement = `html=html.replace('</script>',${JSON.stringify(audioPatch)}+'</script>');\n    ${marker}`;
+        const patchJson = JSON.stringify(audioPatch);
+        const replacement = `const __closeScript='<'+'/script>';\n    html=html.replace(__closeScript,${patchJson}+__closeScript);\n    ${marker}`;
         html = html.replace(marker, replacement);
 
         return html;

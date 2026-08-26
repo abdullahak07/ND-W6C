@@ -1,0 +1,1 @@
+Vercel loader uses a Vite-emitted binary asset so browsers do not treat the compressed site payload as a Content-Encoding response.

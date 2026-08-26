@@ -10,13 +10,14 @@ html,body{height:100%;margin:0}body{display:grid;place-items:center;font-family:
 </head>
 <body>
 <div class="loader"><div class="ring"></div><strong>Loading COMP6013 Week 6</strong><div class="bar"><i></i></div><div class="small">TLS · HTTPS · SSH · interactive games</div></div>
-<script>
+<script type="module">
+import siteUrl from './site.bin?url';
 (async()=>{
   try{
     if('scrollRestoration' in history) history.scrollRestoration='manual';
-    const r=await fetch('/site.gz',{cache:'no-store'});
+    const r=await fetch(siteUrl,{cache:'no-store'});
     if(!r.ok) throw new Error('site payload '+r.status);
-    if(typeof DecompressionStream==='undefined') throw new Error('Your browser does not support the required decompression feature.');
+    if(typeof DecompressionStream==='undefined') throw new Error('Please use an up-to-date Chrome, Edge, Firefox or Safari browser.');
     const html=await new Response(r.body.pipeThrough(new DecompressionStream('gzip'))).text();
     if(!html.includes('HTTPS CASTLE')||!html.includes('HANDSHAKE HERO')||!html.includes('FINAL STUDENT THEME')) throw new Error('Website payload validation failed.');
     document.open();document.write(html);document.close();
